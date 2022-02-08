@@ -1,10 +1,15 @@
 package com.karimmammadov.currencyrates.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
+
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.karimmammadov.currencyrates.R
@@ -12,6 +17,7 @@ import com.karimmammadov.currencyrates.adapter.RecyclerViewAdapter
 import com.karimmammadov.currencyrates.model.CurrencyModel
 import com.karimmammadov.currencyrates.service.CurrencyAPI
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.row_layout.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -35,12 +41,12 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
 
         //d214486cf3fe3c6e17287f6a1f6b9f03
         //http://data.fixer.io/api/latest?access_key=d214486cf3fe3c6e17287f6a1f6b9f03
-
         //RecyclerView
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         mainProgressBar.visibility = View.VISIBLE
         loadData()
+
     }
 
     private fun loadData() {
@@ -75,6 +81,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
 
     private fun handleResponse(response: Response<CurrencyModel>) {
         mainProgressBar.visibility = View.GONE
+
         response.body()?.let {
 
             baseTextView.text = String.format(resources.getString(R.string.baseLabel), it.base)
@@ -89,5 +96,25 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
 
     override fun onItemClick(currencyModel: Pair<String, Double>) {
         Toast.makeText(this, "Clicked : ${currencyModel.first}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        val search = menu?.findItem(R.id.menu_search)
+        val searchView = search?.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                recyclerViewAdapter!!.filter.filter(p0)
+                return false
+            }
+
+        })
+        return true;
     }
 }

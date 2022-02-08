@@ -2,4 +2,5 @@
     <string name="app_name">CurrencyRates</string>
     <string name="baseLabel">Base: %s</string>
     <string name="dateLabel">Date: %s</string>
+    <string name="search">Search</string>
 </resources>

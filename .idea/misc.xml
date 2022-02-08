@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Karim Mammadov/Downloads/CurrencyRates/CurrencyRates/app/src/main/res/layout/activity_main.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/Karim Mammadov/Downloads/CurrencyRates/CurrencyRates/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/Karim Mammadov/Downloads/CurrencyRates/CurrencyRates/app/src/main/res/layout/row_layout.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/Karim Mammadov/Downloads/CurrencyRates/CurrencyRates/app/src/main/res/menu/main_menu.xml" value="0.2074074074074074" />
+        <entry key="..\:/Users/Karim Mammadov/Downloads/CurrencyRates/CurrencyRates/app/src/main/res/menu/menu.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/row_layout.xml" value="0.4036458333333333" />
       </map>

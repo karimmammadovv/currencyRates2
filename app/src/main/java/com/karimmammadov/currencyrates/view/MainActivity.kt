@@ -32,14 +32,22 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
     companion object {
         private val LOG_TAG = MainActivity::class.java.simpleName
     }
-    private lateinit var currencyList : ArrayList<CurrencyModel>
-    private lateinit var currencyListNew : ArrayList<CurrencyModel>
+
+    //1
+    private lateinit var currencyList : ArrayList<Pair<String,Double>>
+    private lateinit var currencyListNew : ArrayList<Pair<String,Double>>
+    var searchText : String = ""
+
     private val BASE_URL = "http://data.fixer.io/api/"
     private var recyclerViewAdapter: RecyclerViewAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //2
+        currencyList = ArrayList<Pair<String, Double>>()
+        currencyListNew= ArrayList<Pair<String, Double>>()
 
         //f4a90b01433fcef9c04042bd70da5f67
         //http://data.fixer.io/api/latest?access_key=f4a90b01433fcef9c04042bd70da5f67
@@ -89,10 +97,15 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
             baseTextView.text = String.format(resources.getString(R.string.baseLabel), it.base)
             dateTextView.text = String.format(resources.getString(R.string.dateLabel), it.date)
 
-            recyclerViewAdapter =
-                RecyclerViewAdapter(it.rates.toList(), this@MainActivity)
+            //3
+            currencyList.addAll(it.rates.toList())
+
+            recyclerViewAdapter = RecyclerViewAdapter(currencyListNew, this@MainActivity)
             recyclerView.adapter = recyclerViewAdapter
 
+            //4
+            recyclerViewAdapter?.notifyDataSetChanged()
+            currencyListNew.addAll(currencyList)
         }
     }
 
@@ -111,21 +124,15 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    currencyList = ArrayList()
-                 if(newText!!.isNotEmpty()){
-                     currencyList.clear()
-                     var search = newText.toLowerCase(Locale.getDefault())
-                     for (currency in currencyList){
-                        if (currency.toString().toLowerCase(Locale.getDefault()).contains(search)){
-                            currencyListNew.add(currency)
+                    //5
+                    searchText = newText!!.toLowerCase(Locale.getDefault())
+                    currencyListNew.clear()
+                    currencyList.forEach {
+                        if (it.first.toLowerCase(Locale.getDefault()).startsWith(searchText)){
+                            currencyListNew.add(it)
                         }
-                         recyclerViewAdapter!!.notifyDataSetChanged()
-                     }
-                 }else{
-                     currencyListNew.clear()
-                     currencyListNew.addAll(currencyList)
-                     recyclerViewAdapter!!.notifyDataSetChanged()
-                 }
+                        recyclerViewAdapter?.notifyDataSetChanged()
+                    }
                     return true
                 }
             })

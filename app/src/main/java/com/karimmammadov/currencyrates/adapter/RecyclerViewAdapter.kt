@@ -18,9 +18,9 @@ import kotlin.collections.ArrayList
 class RecyclerViewAdapter(
     private var currencyList: List<Pair<String, Double>>,
     private val listener: Listener
-) : RecyclerView.Adapter<RecyclerViewAdapter.RowHolder>(), Filterable {
-    lateinit var itemModelListFilter: ArrayList<CurrencyModel>
-    lateinit var itemModel: ArrayList<CurrencyModel>
+) : RecyclerView.Adapter<RecyclerViewAdapter.RowHolder>() {
+   // lateinit var itemModelListFilter: ArrayList<CurrencyModel>
+   // lateinit var itemModel: ArrayList<CurrencyModel>
 
     interface Listener {
         fun onItemClick(currencyModel: Pair<String, Double>)
@@ -49,7 +49,7 @@ class RecyclerViewAdapter(
     override fun getItemCount(): Int {
         return currencyList.count()
     }
-
+/*
     override fun getFilter(): android.widget.Filter {
         return object : android.widget.Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
@@ -74,12 +74,16 @@ class RecyclerViewAdapter(
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
 
-                 arrayOf(currencyList) == p1!!.values as ArrayList<CurrencyModel>
+                arrayOf(currencyList) == p1!!.values as ArrayList<CurrencyModel>
                 notifyDataSetChanged()
 
             }
         }
     }
+ */
 }
+
+
+
 
 

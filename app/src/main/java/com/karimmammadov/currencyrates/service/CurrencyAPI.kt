@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface CurrencyAPI {
 
-    @GET("latest?access_key=d214486cf3fe3c6e17287f6a1f6b9f03")
+    @GET("latest?access_key=f4a90b01433fcef9c04042bd70da5f67")
     fun getCurrencies(): Call<CurrencyModel>
 }

@@ -1,10 +1,9 @@
 package com.karimmammadov.currencyrates.view
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 
 import android.widget.Toast
@@ -25,13 +24,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
 
     companion object {
         private val LOG_TAG = MainActivity::class.java.simpleName
     }
-
+    private lateinit var currencyList : ArrayList<CurrencyModel>
+    private lateinit var currencyListNew : ArrayList<CurrencyModel>
     private val BASE_URL = "http://data.fixer.io/api/"
     private var recyclerViewAdapter: RecyclerViewAdapter? = null
 
@@ -39,8 +41,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //d214486cf3fe3c6e17287f6a1f6b9f03
-        //http://data.fixer.io/api/latest?access_key=d214486cf3fe3c6e17287f6a1f6b9f03
+        //f4a90b01433fcef9c04042bd70da5f67
+        //http://data.fixer.io/api/latest?access_key=f4a90b01433fcef9c04042bd70da5f67
         //RecyclerView
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -100,21 +102,34 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        val search = menu?.findItem(R.id.menu_search)
-        val searchView = search?.actionView as? SearchView
-        searchView?.isSubmitButtonEnabled = true
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
+        var item: MenuItem = menu!!.findItem(R.id.menu_search)
+        if (item != null){
+            var searchView = item.actionView as SearchView
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
 
-                return true
-            }
-
-            override fun onQueryTextChange(p0: String?): Boolean {
-                recyclerViewAdapter!!.filter.filter(p0)
-                return false
-            }
-
-        })
-        return true;
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    currencyList = ArrayList()
+                 if(newText!!.isNotEmpty()){
+                     currencyList.clear()
+                     var search = newText.toLowerCase(Locale.getDefault())
+                     for (currency in currencyList){
+                        if (currency.toString().toLowerCase(Locale.getDefault()).contains(search)){
+                            currencyListNew.add(currency)
+                        }
+                         recyclerViewAdapter!!.notifyDataSetChanged()
+                     }
+                 }else{
+                     currencyListNew.clear()
+                     currencyListNew.addAll(currencyList)
+                     recyclerViewAdapter!!.notifyDataSetChanged()
+                 }
+                    return true
+                }
+            })
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 }
